@@ -2,10 +2,16 @@
   "extends": ["react-app", "react-app/jest", "plugin:prettier/recommended"],
   "overrides": [
     {
-      "files": ["**/reducers/*"],
+      "files": ["*"],
       "rules": {
-        "import/no-anonymous-default-export": "off"
+        "import/no-anonymous-default-export": "off",
+        "prettier/prettier": [
+          "error",
+          {
+            "endOfLine": "auto"
+          }
+        ]
       }
     }
-  ]
+  ]  
 }
