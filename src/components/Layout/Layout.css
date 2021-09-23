@@ -1,0 +1,28 @@
+.body {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  color: white;
+  padding: 0px 50px;
+}
+
+.body a {
+  color: #9dadcc;
+}
+
+.header {
+  width: 100%;
+  display: flex;
+}
+
+.header .header-logo {
+  height: 80px;
+  pointer-events: none;
+  padding: 10px;
+}
+
+.header h2 {
+  margin-top: 30px;
+  margin-left: 20px;
+}
