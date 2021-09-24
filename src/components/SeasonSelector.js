@@ -1,3 +1,8 @@
+import { useState } from "react";
+import { connect } from "react-redux";
+
+import { changeYear } from "../state/actions";
+
 import styled from "styled-components";
 
 const seasonYears = Array.from({ length: new Date().getFullYear() - 1950 + 1 }, (v, k) => k + 1950);
@@ -33,8 +38,20 @@ const Option = styled.option`
 `;
 
 function SeasonSelector(props) {
+  const [year, setYear] = useState(0);
+
   return (
-    <Select {...props}>
+    <Select
+      {...props}
+      onChange={(e) => {
+        setYear(e.target.value);
+        const payload = {
+          year: e.target.value,
+        };
+        props.changeYear(payload);
+      }}
+      value={year}
+    >
       {seasonYears.map((year) => (
         <Option key={year} value={year}>
           {year}
@@ -44,4 +61,8 @@ function SeasonSelector(props) {
   );
 }
 
-export default SeasonSelector;
+const mapDispatchToProps = (dispatch) => ({
+  changeYear: (payload) => dispatch(changeYear(payload)),
+});
+
+export default connect(null, mapDispatchToProps)(SeasonSelector);

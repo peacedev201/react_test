@@ -1,0 +1,1 @@
+export { changeYear } from "./global";

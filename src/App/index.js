@@ -11,6 +11,9 @@ function App() {
         <Route path="/" exact>
           <PageSeasons />
         </Route>
+        <Route path="/driver/:id" exact>
+          <PageSeasons />
+        </Route>
       </Switch>
     </Layout>
   );
