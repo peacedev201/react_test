@@ -14,87 +14,44 @@ function PageSeasons(props) {
   const [constructors, setConstructors] = useState([]);
 
   const [total, setTotal] = useState({
-    result: 0,
+    driver: 0,
+    constructor: 0,
   });
 
   useEffect(() => {
     setDrivers([]);
     setConstructors([]);
     const fetchTotal = async () => {
-      let resultNum = (await axios.get(`/${selectedYear}/results.json`)).data.MRData.total;
+      let driverNum = (await axios.get(`/${selectedYear}/driverStandings.json`)).data.MRData.total;
+      let constructorNum = (await axios.get(`/${selectedYear}/constructorStandings.json`)).data.MRData.total;
       setTotal({
-        result: resultNum,
+        driver: parseInt(driverNum),
+        constructor: parseInt(constructorNum),
       });
     };
-    if (!total.result && selectedYear) {
-      fetchTotal();
-    }
-  }, [total, selectedYear]);
+    fetchTotal();
+  }, [selectedYear]);
 
   const getDriverInfo = useCallback(async () => {
     try {
-      const result = (await axios.get(`/${selectedYear}/results.json?limit=${total.result}&offset=0`)).data.MRData
-        .RaceTable.Races;
-
-      let temp_driver = {};
-      let temp_constructor = {};
-
-      for (const iterator of result) {
-        for (const item of iterator.Results) {
-          if (temp_driver[item.Driver.driverId]) {
-            let temp = {
-              ...item.Driver,
-              point: parseInt(item.points) + parseInt(temp_driver[item.Driver.driverId].point),
-              constructor: item.Constructor.name,
-            };
-            temp_driver = { ...temp_driver, [item.Driver.driverId]: temp };
-          } else {
-            temp_driver = {
-              ...temp_driver,
-              [item.Driver.driverId]: {
-                ...item.Driver,
-                point: parseInt(item.points),
-                constructor: item.Constructor.name,
-              },
-            };
-          }
-
-          if (temp_constructor[item.Constructor.constructorId]) {
-            let temp = {
-              ...item.Constructor,
-              point: parseInt(item.points) + parseInt(temp_constructor[item.Constructor.constructorId].point),
-            };
-            temp_constructor = { ...temp_constructor, [item.Constructor.constructorId]: temp };
-          } else {
-            temp_constructor = {
-              ...temp_constructor,
-              [item.Constructor.constructorId]: {
-                ...item.Constructor,
-                point: parseInt(item.points),
-              },
-            };
-          }
-        }
+      if (total.driver) {
+        const driverResult = (await axios.get(`/${selectedYear}/driverStandings.json?limit=${total.driver}&offset=0`))
+          .data.MRData.StandingsTable.StandingsLists[0]?.DriverStandings;
+        setDrivers(driverResult);
       }
-
-      setDrivers(
-        Object.values(temp_driver).sort((a, b) => {
-          return b.point - a.point;
-        })
-      );
-
-      setConstructors(
-        Object.values(temp_constructor).sort((a, b) => {
-          return b.point - a.point;
-        })
-      );
+      if (total.constructor) {
+        const constructorResult = (
+          await axios.get(`/${selectedYear}/constructorStandings.json?limit=${total.constructor}&offset=0`)
+        ).data.MRData.StandingsTable.StandingsLists[0]?.ConstructorStandings;
+        setConstructors(constructorResult);
+      }
     } catch (error) {
       console.log(error);
     }
   }, [selectedYear, total]);
 
   useEffect(() => {
-    if (selectedYear && total.result) {
+    if (selectedYear && total.driver) {
       getDriverInfo();
     }
   }, [selectedYear, total, getDriverInfo]);
@@ -118,20 +75,24 @@ function PageSeasons(props) {
             {drivers.map((item, index) => {
               return (
                 <tr key={index}>
-                  <td>{index + 1}</td>
+                  <td>{item.position}</td>
                   <td
                     className="drivername"
                     onClick={() => {
-                      history.push(`/driver/${item.driverId}`);
+                      history.push(`/driver`);
                       props.selectDriver({
                         driver: item,
                       });
                     }}
                   >
-                    {item.givenName + " " + item.familyName}
+                    {item.Driver.givenName + " " + item.Driver.familyName}
                   </td>
-                  <td>{item.constructor}</td>
-                  <td>{item.point}</td>
+                  <td>
+                    {item.Constructors.map((i) => {
+                      return i.name;
+                    }).join()}
+                  </td>
+                  <td>{item.points}</td>
                 </tr>
               );
             })}
@@ -150,9 +111,9 @@ function PageSeasons(props) {
             {constructors.map((item, index) => {
               return (
                 <tr key={index}>
-                  <td>{index + 1}</td>
-                  <td>{item.name}</td>
-                  <td>{item.point}</td>
+                  <td>{item.position}</td>
+                  <td>{item.Constructor.name}</td>
+                  <td>{item.points}</td>
                 </tr>
               );
             })}

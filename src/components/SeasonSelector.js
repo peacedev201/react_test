@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 
-import { changeYear } from "../state/actions";
+import { changeYear, selectDriver } from "../state/actions";
 
 import styled from "styled-components";
 
@@ -39,6 +39,12 @@ const Option = styled.option`
 
 function SeasonSelector(props) {
   const [year, setYear] = useState(0);
+  const selectedYear = props.global.year;
+  useEffect(() => {
+    if (selectedYear) {
+      setYear(selectedYear);
+    }
+  }, [selectedYear]);
 
   return (
     <Select
@@ -65,4 +71,8 @@ const mapDispatchToProps = (dispatch) => ({
   changeYear: (payload) => dispatch(changeYear(payload)),
 });
 
-export default connect(null, mapDispatchToProps)(SeasonSelector);
+const mapStateToProps = (state) => ({
+  global: state.global,
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(SeasonSelector);

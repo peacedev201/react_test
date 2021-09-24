@@ -12,7 +12,7 @@ function App() {
         <Route path="/" exact>
           <PageSeasons />
         </Route>
-        <Route path="/driver/:id" exact>
+        <Route path="/driver" exact>
           <DriverInfo />
         </Route>
       </Switch>
