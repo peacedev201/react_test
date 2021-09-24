@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 
-import { changeYear, selectDriver } from "../state/actions";
+import { changeYear } from "../state/actions";
 
 import styled from "styled-components";
 
