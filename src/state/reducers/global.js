@@ -1,7 +1,7 @@
 import { CHANGE_YEAR } from "../actions/constant";
 
 const initialState = {
-  year: null,
+  year: 1950,
 };
 
 function global(state = initialState, action) {

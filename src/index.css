@@ -11,3 +11,17 @@ td {
   text-align: left;
   padding-right: 15px;
 }
+
+.result {
+  display: flex;
+  justify-content: space-between;
+}
+
+table {
+  height: fit-content;
+}
+
+.drivername {
+  cursor: pointer;
+  text-decoration: underline;
+}
