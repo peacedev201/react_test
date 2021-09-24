@@ -1,1 +1,1 @@
-export { changeYear } from "./global";
+export { changeYear, selectDriver } from "./global";

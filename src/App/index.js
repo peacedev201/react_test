@@ -3,6 +3,7 @@ import { Switch, Route } from "react-router-dom";
 import PageSeasons from "../pages/Seasons";
 
 import Layout from "../components/Layout";
+import DriverInfo from "../pages/DriverInfo";
 
 function App() {
   return (
@@ -12,7 +13,7 @@ function App() {
           <PageSeasons />
         </Route>
         <Route path="/driver/:id" exact>
-          <PageSeasons />
+          <DriverInfo />
         </Route>
       </Switch>
     </Layout>
